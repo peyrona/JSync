@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <!-- There can be one or more tasks: each one has its own properties. -->
+    <task>
+        <origin>/home/peyrona/proyectos/Balata/bookedup</origin>
+        <destination>/home/peyrona/var/proyectos/Balata/bookedup</destination>
+        <max_file_size>10000000</max_file_size>
+        <ignore_file_ext>.jar</ignore_file_ext>
+        <ignore_file_ext>.was</ignore_file_ext>
+        <ignore_file_ext>.ear</ignore_file_ext>
+        <ignore_file_ext>.zip</ignore_file_ext>
+        <ignore_file_ext>.7z</ignore_file_ext>
+        <ignore_folder_name>lib</ignore_folder_name>
+        <ignore_folder_name>.svn</ignore_folder_name>
+        <ignore_folder_name>build</ignore_folder_name>
+        <ignore_folder_name>dist</ignore_folder_name>
+        <ignore_folder_name>target</ignore_folder_name>
+    </task>
+</root>
