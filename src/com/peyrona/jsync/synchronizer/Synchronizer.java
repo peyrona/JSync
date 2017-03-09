@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 Francisco José Morero Peyrona. All Rights Reserved.
+ *
+ * GNU Classpath is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the free
+ * Software Foundation; either version 3, or (at your option) any later version.
+ *
+ * This app is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this software; see the file COPYING.  If not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 package com.peyrona.jsync.synchronizer;
 
@@ -8,6 +23,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 /**
+ * Is in charge of performing the synchronization between 2 folders.
+ * It is done into 2 phases:
+ * <ul>
+ * <li>First FullSync class makes that Origin and Destination will have the same
+ * contents (update changes since last execution of this application).</li>
+ * <li>Later, Watcher will monitorize changes in Origin folder and will replicate
+ * these changes into Destination folder.</li>
+ * </ul>
  *
  * @author peyrona
  */

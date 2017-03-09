@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Francisco José Morero Peyrona. All Rights Reserved.
+ * Copyright (C) 2017 Francisco José Morero Peyrona. All Rights Reserved.
  *
  * GNU Classpath is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the free
@@ -34,10 +34,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * Esta clase tiene un conjunto de métodos para facilitar la búsqueda de nodos
- * en ficheros XML. No es la manera má eficiente de procesar XMLs y por ello
- * no debe utilizarse con ficheros enormes (de muchos megas), pero es muy cómodo
- * y bastante rápido.
+ * Just a set of static methods to facilitate processing XML files.
+ * This is not an efficient implementation but is very handy.
  *
  * @author peyrona
  */
