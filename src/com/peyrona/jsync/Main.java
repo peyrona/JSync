@@ -19,6 +19,7 @@ package com.peyrona.jsync;
 import com.peyrona.jsync.config.Task;
 import com.peyrona.jsync.synchronizer.Synchronizer;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -26,21 +27,20 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 /**
- * Applucation entry point.
- * 
+ * Application entry point.
+ *
  * @author peyrona
  */
 public class Main
 {
-    // COMO MONTAR BOX.COM EN LINUX
+    // HOW TO MOUNT BOX.COM IN LINUX
     // http://xmodulo.com/how-to-mount-box-com-cloud-storage-on-linux.html
-    // http://askubuntu.com/questions/403785/mount-your-box-account-or-sync-a-folder-with-it
 
     public  static final String  sAPP_NAME    = "JSync";
     public  static final String  sCONFIG_FILE = sAPP_NAME +".config.xml";
-    public  static final String  sLOG_NAME    = sAPP_NAME +"-%u.%g.log.txt";
-    public  static final Logger  logger       = initLogger();
-    private static       boolean bVerbose     = false;   /* By default false */
+    public  static final Logger  logger       = initLogger( sAPP_NAME +"-%u.%g.log.txt" );
+    private static       boolean bVerbose     = false;         /* By default false */
+    private static       boolean bTest        = false;         /* By default false */
 
     //----------------------------------------------------------------------------//
 
@@ -62,6 +62,11 @@ public class Main
                     bVerbose = true;
                     break;
 
+                case "-t":
+                case "--test":
+                    bTest = true;
+                    break;
+
                 case "-h":
                 case "--help":
                     showHelp();
@@ -77,8 +82,8 @@ public class Main
 
         if( ! fConfig.exists() )
         {
-            showHelp();
-            System.exit( 0 );
+            log( Level.SEVERE, null, new FileNotFoundException( fConfig.toString() ) );
+            System.exit( 1 );
         }
 
         try
@@ -96,7 +101,7 @@ public class Main
 
     public static void info( String msg )
     {
-        if( bVerbose == true )
+        if( bVerbose )
         {
             log( Level.INFO, msg, null );
         }
@@ -109,7 +114,15 @@ public class Main
 
     public static void log( Level level, String msg, Exception exc )
     {
-        logger.log( level, msg, exc );
+        if( logger != null )
+        {
+            logger.log( level, msg, exc );
+        }
+    }
+
+    public static boolean isTesting()
+    {
+        return bTest;
     }
 
     //----------------------------------------------------------------------------//
@@ -120,30 +133,32 @@ public class Main
         System.out.println( "Syntax:              (all parameters are optional)" );
         System.out.println( "-c, --config  <fileName> : set config file. By default: '"+ sCONFIG_FILE +"'." );
         System.out.println( "-v, --verbose            : extra information is sent to log file. By default it is off" );
+        System.out.println( "-t, --test               : operations of copying and deleting are not performed" );
         System.out.println( "-h, --help               : shows this information and quit" );
         System.out.println();
         System.out.println( "Example: java -jar JSync.jar -v -c /home/username/jsync.xml" );
     }
 
-    private static Logger initLogger()
+    private static Logger initLogger( String sLogName )
     {
-        Logger logger = Logger.getLogger( Logger.GLOBAL_LOGGER_NAME );
-               logger.setLevel( Level.FINEST );
+        Logger lgr = Logger.getLogger( Logger.GLOBAL_LOGGER_NAME );
+               lgr.setLevel( Level.FINEST );
 
         try
         {
-            FileHandler fh = new FileHandler( sLOG_NAME, 5*1000*1024, 9, true );
+            FileHandler fh = new FileHandler( sLogName, 5*1000*1024, 9, true );
                         fh.setFormatter( new SimpleFormatter() );
 
-            logger.addHandler( fh );
+            lgr.addHandler( fh );
         }
         catch( IOException ex )
         {
+            lgr = null;
             System.err.println( "Error while configuring Logger." );
             ex.printStackTrace( System.err );
         }
 
-        return logger;
+        return lgr;
     }
 
     private static void execute( File fConfig ) throws Exception
@@ -156,6 +171,12 @@ public class Main
                    filter.setMaxSize( task.getMaxFileSize() );
                    filter.setFileExtensionsToIgnore( task.getIgnoreFileExts() );
                    filter.setFolderNamesToIgnore( task.getFolderNames() );
+
+            info( "------------------------------------------------------------------------------\n"+
+                  "Synchronization Started\n"+
+                  "Config file: "+ fConfig +"\n"+
+                  "Origin     : "+ fOrigin +"\n"+
+                  "Destination: "+ fDestin +"\n" );
 
             (new Synchronizer( fOrigin, fDestin, filter )).start();
         }

@@ -42,15 +42,12 @@ final class Filter implements FileFilter
     {
         if( file.isDirectory() )
         {
-            for( String ignore : lstFolder )
+            if( lstFolder.contains( file.getName().toLowerCase() ) )
             {
-                if( file.getName().equalsIgnoreCase( ignore ) )
-                {
-                    return false;
-                }
+                return false;
             }
         }
-        else                                    // Everything is not a dir will be treated as a file
+        else                                    // Everything that is not a dir will be treated as a file
         {
             if( (nMaxSize > 0) && file.length() > nMaxSize )
             {
@@ -71,7 +68,11 @@ final class Filter implements FileFilter
     void setFileExtensionsToIgnore( Set<String> lst )
     {
         lstFileExt.clear();
-        lstFileExt.addAll( lst );
+
+        for( String ext : lst )
+        {
+            addFileExtension( ext );
+        }
     }
 
     void addFileExtension( String ext )
@@ -85,7 +86,11 @@ final class Filter implements FileFilter
     void setFolderNamesToIgnore( Set<String> lst )
     {
         lstFolder.clear();
-        lstFolder.addAll( lst );
+
+        for( String name : lst )
+        {
+            addFolderName( name );
+        }
     }
 
     void addFolderName( String name )
@@ -108,7 +113,7 @@ final class Filter implements FileFilter
         final String name  = file.getName();
         final int    index = name.lastIndexOf( '.' );
 
-        return (((index == -1) || name.endsWith( "." )) ? ""
-                                                        : name.substring( index+1 )).trim().toLowerCase();
+        return ((index == -1) ? ""
+                              : name.substring( index ).toLowerCase());
     }
 }

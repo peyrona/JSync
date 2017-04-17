@@ -41,7 +41,7 @@ final class FullSync
 
     //----------------------------------------------------------------------------//
 
-    public FullSync( File fOrigi, File fDesti, FileFilter filter )
+    FullSync( File fOrigi, File fDesti, FileFilter filter )
     {
         this.fOrigi = fOrigi;
         this.fDesti = fDesti;

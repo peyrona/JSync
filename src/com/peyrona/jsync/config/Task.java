@@ -62,7 +62,7 @@ public final class Task
 
     public String getOriginFolder() { return sOriginFolder; }
     public String getDestinFolder() { return sDestinFolder; }
-    public long getMaxFileSize()    { return nMaxFileSize;  }
+    public long   getMaxFileSize()  { return nMaxFileSize;  }
 
     public Set<String> getIgnoreFileExts() { return lstIgnoreFileExts;    }
     public Set<String> getFolderNames()    { return lstIgnoreFolderNames; }
@@ -89,7 +89,7 @@ public final class Task
                 }
                 else if( "max_file_size".equals( sNodeName ) )
                 {
-                    task.nMaxFileSize = Long.parseLong( XMLHelper.getNodeValue( node ) );
+                    task.nMaxFileSize = Long.parseLong( XMLHelper.getNodeValue( node ) ) * 1024;
                 }
                 else if( "ignore_file_ext".equals( sNodeName ) )
                 {

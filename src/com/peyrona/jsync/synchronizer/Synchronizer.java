@@ -62,6 +62,7 @@ public final class Synchronizer
         catch( IOException ioe )
         {
             w = null;
+            Main.log( Level.SEVERE, ioe );
         }
 
         this.watcher = w;

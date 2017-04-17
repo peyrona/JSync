@@ -48,7 +48,7 @@ public class Utils
                &&
                (fOrig.length() == fDest.length())
                &&
-               (isEqualLastModified( fOrig.lastModified(), fDest.lastModified() ));
+               (isEqualLastModified( fOrig, fDest ));
     }
 
     /**
@@ -73,10 +73,13 @@ public class Utils
     {
         try
         {
-            Files.copy( fOri.toPath(),
-                        fDes.toPath(),
-                        StandardCopyOption.REPLACE_EXISTING,
-                        StandardCopyOption.COPY_ATTRIBUTES );
+            if( ! Main.isTesting() )
+            {
+                Files.copy( fOri.toPath(),
+                            fDes.toPath(),
+                            StandardCopyOption.REPLACE_EXISTING,
+                            StandardCopyOption.COPY_ATTRIBUTES );
+            }
 
             Main.info( fOri + " --> copied");
         }
@@ -89,20 +92,34 @@ public class Utils
     /**
      * Deletes a file or a folder with all its contents.
      *
-     * @param f File or folder to delete.
+     * @param file File or folder to delete.
      */
-    public static void delete( File f )
+    public static void delete( File file )
     {
-        if( f.isDirectory() )
+        if( file.isDirectory() )
         {
-            for( File c : f.listFiles() )
+            for( File f : file.listFiles() )
             {
-                delete( c );
+                delete( f );
             }
         }
-        else if( ! f.delete() )
+        else
         {
-            Main.log( Level.WARNING, new IOException( "Can not delete: "+ f ) );
+            boolean bDeleted = true;
+
+            if( ! Main.isTesting() )
+            {
+                bDeleted = file.delete();
+            }
+
+            if( bDeleted )
+            {
+                Main.info( file + " --> deleted" );
+            }
+            else
+            {
+                Main.log( Level.WARNING, new IOException( "Can not delete: "+ file ) );
+            }
         }
     }
 
@@ -116,8 +133,11 @@ public class Utils
     //----------------------------------------------------------------------------//
 
     // Rounded to minute
-    private static boolean isEqualLastModified( long n, long m )
+    private static boolean isEqualLastModified( File fOrig, File fDest )
     {
+        long n = fOrig.lastModified();
+        long m = fDest.lastModified();
+
         return (n / (1000*60)) == (m / (1000*60));
     }
 }
