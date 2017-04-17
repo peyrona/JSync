@@ -11,7 +11,7 @@ the box.com FS to my local Linux FS, and JSync do the job.
     <task>
         <origin>/home/peyrona/proyectos/Balata/bookedup</origin>
         <destination>/home/peyrona/var/proyectos/Balata/bookedup</destination>
-        <max_file_size>10000000</max_file_size>
+        <max_file_size>10000</max_file_size>       <!-- In Kb -->
         <ignore_file_ext>.jar</ignore_file_ext>
         <ignore_file_ext>.war</ignore_file_ext>
         <ignore_file_ext>.ear</ignore_file_ext>
